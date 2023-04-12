@@ -3,6 +3,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { EmployeeService } from '../services/employee.service';
 import { Links } from '../types/links';
 import { ServerData } from '../types/server-data';
+import {MatDialog} from '@angular/material/dialog';
+import { NewEmployeeDialogComponent } from '../new-employee-dialog/new-employee-dialog.component';
 
 export interface Employee {
   id: number;
@@ -39,7 +41,10 @@ export class EmployeeMatTableComponent {
   pageNumber = 0;
   dataSource = new MatTableDataSource<Employee>();
 
-  constructor(private employeeService: EmployeeService) {
+  constructor(
+    private employeeService: EmployeeService,
+    private dialog: MatDialog
+  ) {
     this.loadPage(0);
   }
 
@@ -86,6 +91,7 @@ export class EmployeeMatTableComponent {
   }
 
   showDialog() {
-    
+    const ref = this.dialog.open(NewEmployeeDialogComponent);
+    ref.afterClosed().subscribe(data => { })
   }
 }

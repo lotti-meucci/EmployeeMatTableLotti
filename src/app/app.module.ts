@@ -8,13 +8,17 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatTableModule} from '@angular/material/table';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
+import {MatDialogModule} from '@angular/material/dialog';
 import { HttpClientModule } from '@angular/common/http';
-
+import { NewEmployeeDialogComponent } from './new-employee-dialog/new-employee-dialog.component';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
     EmployeeMatTableComponent,
+    NewEmployeeDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -22,7 +26,10 @@ import { HttpClientModule } from '@angular/common/http';
     MatTableModule,
     MatIconModule,
     MatButtonModule,
+    MatDialogModule,
+    MatFormFieldModule,
     HttpClientModule,
+    FormsModule,
     BrowserAnimationsModule
   ],
   providers: [],
