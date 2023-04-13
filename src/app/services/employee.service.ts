@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Employee } from '../types/employee';
 import { ServerData } from '../types/server-data';
 
 const PAGE_SIZE = 10;
@@ -16,10 +17,14 @@ export class EmployeeService {
       params: new HttpParams()
         .set('page', page ?? 0)
         .set('size', size ?? PAGE_SIZE)
-    })
+    });
   }
 
   deleteData(url: string, id: number): Observable<unknown> {
     return this.http.delete(url + '/' + id);
+  }
+
+  postData(url: string, employee: Employee) {
+    return this.http.post<ServerData>(url, employee);
   }
 }

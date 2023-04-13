@@ -1,6 +1,14 @@
 import { Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+import { ErrorStateMatcher } from '@angular/material/core';
 import { Employee } from '../types/employee';
+
+export class DefaultErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+  }
+}
 
 @Component({
   selector: 'app-new-employee-dialog',
@@ -17,5 +25,13 @@ export class NewEmployeeDialogComponent {
     hireDate: ''
   };
 
-  constructor(private ref: MatDialogRef<NewEmployeeDialogComponent>) { }
+  form = new FormGroup({
+    lastNameControl: new FormControl(),
+    firstNameControl: new FormControl(),
+    genderControl: new FormControl(),
+    birthDateControl: new FormControl(),
+    hireDateControl: new FormControl()
+  });
+
+  matcher = new DefaultErrorStateMatcher();
 }

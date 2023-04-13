@@ -5,6 +5,7 @@ import { Links } from '../types/links';
 import { ServerData } from '../types/server-data';
 import {MatDialog} from '@angular/material/dialog';
 import { NewEmployeeDialogComponent } from '../new-employee-dialog/new-employee-dialog.component';
+import { EMPLOYEES_ROUTE } from '../constants';
 
 export interface Employee {
   id: number;
@@ -14,8 +15,6 @@ export interface Employee {
   gender: string;
   hireDate: string;
 }
-
-const EMPLOYEES_ROUTE = "http://localhost:8080/employees";
 
 @Component({
   selector: 'app-employee-mat-table',
@@ -92,6 +91,16 @@ export class EmployeeMatTableComponent {
 
   showDialog() {
     const ref = this.dialog.open(NewEmployeeDialogComponent);
-    ref.afterClosed().subscribe(data => { })
+
+    ref.afterClosed().subscribe(data =>
+    {
+      if (!data)
+        return;
+
+      this.employeeService.postData(EMPLOYEES_ROUTE, data).subscribe(() => {
+        this.loadPage(this.pageNumber);
+        alert('Nuovo dipendende aggiunto!');
+      });
+    })
   }
 }

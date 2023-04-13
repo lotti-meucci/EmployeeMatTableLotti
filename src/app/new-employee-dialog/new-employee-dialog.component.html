@@ -1,12 +1,86 @@
-<h1 mat-dialog-title>New employee</h1>
-<div mat-dialog-content>
-  <p>What's your favorite animal?</p>
-  <mat-form-field appearance="fill">
-    <mat-label>Favorite Animal</mat-label>
-    <input matInput [(ngModel)]="employee.id" type="number" required>
-  </mat-form-field>
-</div>
-<div mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="data.animal" >Add</button>
-</div>
- 
+<form>
+  <h1 mat-dialog-title>New employee</h1>
+  <div mat-dialog-content>
+    <div>
+      <mat-form-field appearance="fill">
+        <mat-label>Last name</mat-label>
+        <input
+          matInput
+          [formControl]="form.controls.lastNameControl"
+          [(ngModel)]="employee.lastName"
+          type="text"
+          required
+        >
+        <mat-error *ngIf="form.controls.lastNameControl.hasError('required')">
+          Last name is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field appearance="fill">
+        <mat-label>First name</mat-label>
+        <input
+          matInput
+          [formControl]="form.controls.firstNameControl"
+          [(ngModel)]="employee.firstName"
+          type="text"
+          required
+        >
+        <mat-error *ngIf="form.controls.firstNameControl.hasError('required')">
+          First name is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field appearance="fill">
+        <mat-label>Gender</mat-label>
+        <mat-select [formControl]="form.controls.genderControl"
+                    [(ngModel)]="employee.gender"
+                    required>
+          <mat-option value="M">M</mat-option>
+          <mat-option value="F">F</mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.controls.genderControl.hasError('required')">
+          Gender is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field appearance="fill">
+        <mat-label>Birth date</mat-label>
+        <input
+          matInput
+          [formControl]="form.controls.birthDateControl"
+          [(ngModel)]="employee.birthDate"
+          type="date"
+          required
+        >
+        <mat-error *ngIf="form.controls.birthDateControl.hasError('required')">
+          First name is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field appearance="fill">
+        <mat-label>Hire date</mat-label>
+        <input
+          matInput
+          [formControl]="form.controls.hireDateControl"
+          [(ngModel)]="employee.hireDate"
+          type="date"
+          required
+        >
+        <mat-error *ngIf="form.controls.hireDateControl.hasError('required')">
+          First name is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div mat-dialog-actions>
+    <button
+      [disabled]="!form.valid"
+      mat-raised-button
+      color="primary"
+      [mat-dialog-close]="employee">Add</button>
+  </div>
+</form>

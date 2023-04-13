@@ -1,11 +1,11 @@
 // See https://containers.dev/implementors/json_reference/ for configuration reference
 {
-	"name": "Untitled Node.js project",
+	"name": "Employees table",
 	"build": {
 		"dockerfile": "Dockerfile"
 	},
-"remoteUser": "node",
-"features": {
-	"ghcr.io/devcontainers-contrib/features/angular-cli:2": {}
-}
+	"remoteUser": "node",
+	"features": {
+		"ghcr.io/devcontainers-contrib/features/angular-cli:2": {}
+	}
 }
