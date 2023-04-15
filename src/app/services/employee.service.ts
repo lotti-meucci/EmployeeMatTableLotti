@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Employee } from '../types/employee';
+import { Employee } from '../types/employees';
 import { ServerData } from '../types/server-data';
 
 const PAGE_SIZE = 10;
@@ -24,7 +24,14 @@ export class EmployeeService {
     return this.http.delete(url + '/' + id);
   }
 
-  postData(url: string, employee: Employee) {
-    return this.http.post<ServerData>(url, employee);
+  postData(url: string, employee: Employee): Observable<unknown> {
+    return this.http.post(url, employee);
+  }
+
+  putData(url: string, employee: Employee): Observable<unknown> {
+    const id = employee.id;
+    const data = employee as any;
+    delete data.id;
+    return this.http.put(url + '/' + id, employee);
   }
 }

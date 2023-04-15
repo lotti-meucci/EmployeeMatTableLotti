@@ -1,5 +1,12 @@
 <form>
-  <h1 mat-dialog-title>New employee</h1>
+  <h1 mat-dialog-title>
+    <ng-container *ngIf="data; else defaultTitle">
+      Editing employee
+      <strong>{{data.id}}</strong>
+    </ng-container>
+    <ng-template #defaultTitle>New employee</ng-template>
+  </h1>
+
   <div mat-dialog-content>
     <div>
       <mat-form-field appearance="fill">
@@ -78,9 +85,13 @@
   </div>
   <div mat-dialog-actions>
     <button
-      [disabled]="!form.valid"
+      [disabled]="!form.valid || isUnchanged"
       mat-raised-button
       color="primary"
-      [mat-dialog-close]="employee">Add</button>
+      [mat-dialog-close]="employee"
+    >
+      <ng-container *ngIf="data; else defaultCamption">Save</ng-container>
+      <ng-template #defaultCamption>Add</ng-template>
+    </button>
   </div>
 </form>

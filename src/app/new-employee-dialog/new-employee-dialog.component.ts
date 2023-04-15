@@ -1,14 +1,9 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material/core';
-import { Employee } from '../types/employee';
-
-export class DefaultErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
-  }
-}
+import { Component, Inject } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Employee } from '../types/employees';
+import { DefaultErrorStateMatcher } from '../utils/default-error-state-matcher';
+import { isEqual } from "lodash";
 
 @Component({
   selector: 'app-new-employee-dialog',
@@ -34,4 +29,13 @@ export class NewEmployeeDialogComponent {
   });
 
   matcher = new DefaultErrorStateMatcher();
+
+  constructor (@Inject(MAT_DIALOG_DATA) protected data: Employee) {
+    if (data)
+      this.employee = structuredClone(data);
+  }
+
+  get isUnchanged(): boolean {
+    return isEqual(this.employee, this.data);
+  }
 }

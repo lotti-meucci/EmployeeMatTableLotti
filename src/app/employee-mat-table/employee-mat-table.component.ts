@@ -29,7 +29,7 @@ export class EmployeeMatTableComponent {
     'gender',
     'birthDate',
     'hireDate',
-    'remove'
+    'actions'
   ];
 
   links: Links = {
@@ -49,7 +49,7 @@ export class EmployeeMatTableComponent {
 
   removeRow(id: number) {
     this.employeeService.deleteData(EMPLOYEES_ROUTE, id).subscribe(() => {
-      this.loadPage(this.pageNumber);
+      this.reload()
     });
   }
 
@@ -89,7 +89,11 @@ export class EmployeeMatTableComponent {
       this.load(this.links.next.href);
   }
 
-  showDialog() {
+  reload() {
+    this.loadPage(this.pageNumber);
+  }
+
+  showNewDialog() {
     const ref = this.dialog.open(NewEmployeeDialogComponent);
 
     ref.afterClosed().subscribe(data =>
@@ -98,8 +102,24 @@ export class EmployeeMatTableComponent {
         return;
 
       this.employeeService.postData(EMPLOYEES_ROUTE, data).subscribe(() => {
-        this.loadPage(this.pageNumber);
-        alert('Nuovo dipendende aggiunto!');
+        this.reload();
+        alert('New employee added!');
+      });
+    })
+  }
+
+  showEditDialog(employee: Employee) {
+    const id = employee.id;
+    const ref = this.dialog.open(NewEmployeeDialogComponent, { data: employee });
+
+    ref.afterClosed().subscribe(data =>
+    {
+      if (!data)
+        return;
+
+      this.employeeService.putData(EMPLOYEES_ROUTE, data).subscribe(() => {
+        this.reload();
+        alert(`Employee ${id} edited!`);
       });
     })
   }
