@@ -6,6 +6,7 @@ import { ServerData } from '../types/server-data';
 import {MatDialog} from '@angular/material/dialog';
 import { NewEmployeeDialogComponent } from '../new-employee-dialog/new-employee-dialog.component';
 import { EMPLOYEES_ROUTE } from '../constants';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export interface Employee {
   id: number;
@@ -42,7 +43,8 @@ export class EmployeeMatTableComponent {
 
   constructor(
     private employeeService: EmployeeService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {
     this.loadPage(0);
   }
@@ -59,16 +61,26 @@ export class EmployeeMatTableComponent {
     this.links = data._links;
   }
 
-  load(url: string) {
+  load(url: string, loadingLast = false) {
     this.employeeService
       .getData(url)
-      .subscribe(data => this.draw(data));
+      .subscribe(data => {
+        this.draw(data)
+
+        if (loadingLast && this.links.next)
+          this.loadLast();
+      });
   }
 
   loadPage(page: number) {
     this.employeeService
       .getData(EMPLOYEES_ROUTE, page)
-      .subscribe(data => this.draw(data));
+      .subscribe(data => {
+        this.draw(data);
+
+        if (data._embedded.employees.length == 0 && this.links.prev)
+          this.loadPrev();
+      });
   }
 
   loadFirst() {
@@ -76,7 +88,7 @@ export class EmployeeMatTableComponent {
   }
 
   loadLast() {
-    this.load(this.links.last.href);
+    this.load(this.links.last.href, true);
   }
 
   loadPrev() {
@@ -102,8 +114,8 @@ export class EmployeeMatTableComponent {
         return;
 
       this.employeeService.postData(EMPLOYEES_ROUTE, data).subscribe(() => {
-        this.reload();
-        alert('New employee added!');
+        this.loadLast();
+        this.snackBar.open('New employee added!', 'Close');
       });
     })
   }
@@ -119,7 +131,7 @@ export class EmployeeMatTableComponent {
 
       this.employeeService.putData(EMPLOYEES_ROUTE, data).subscribe(() => {
         this.reload();
-        alert(`Employee ${id} edited!`);
+        this.snackBar.open(`Employee ${id} edited!`, 'Close');
       });
     })
   }
